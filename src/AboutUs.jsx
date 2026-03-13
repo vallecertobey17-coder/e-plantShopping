@@ -1,32 +1,69 @@
-import React from 'react';
-import './AboutUs.css';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addItem } from './CartSlice'; // Step 5: Import the addItem reducer
+import './ProductList.css';
 
-function AboutUs() {
+function ProductList() {
+  const dispatch = useDispatch();
+
+  // Step 1: The plantsArray containing plant objects
+  const plantsArray = [
+    {
+      name: "Snake Plant",
+      image: "https://example.com/snake.jpg",
+      description: "Produces oxygen at night.",
+      cost: "$15",
+      category: "Air Purifying"
+    },
+    {
+      name: "Lavender",
+      image: "https://example.com/lavender.jpg",
+      description: "Calming aroma for relaxation.",
+      cost: "$20",
+      category: "Aromatic"
+    }
+    // ... add more plants as needed
+  ];
+
+  // Step 4: useState to track which products are added to the cart
+  // Using an object where the key is the plant name and value is true
+  const [addedToCart, setAddedToCart] = useState({});
+
+  // Step 5 & 6: Function to handle adding to cart and dispatching to global state
+  const handleAddToCart = (plant) => {
+    dispatch(addItem(plant)); // Dispatch to Redux store
+    
+    setAddedToCart((prevState) => ({
+       ...prevState,
+       [plant.name]: true, // Set plant name as key and value to true
+    }));
+  };
+
   return (
-    <div className="about-us-container">
-      {/* <h1 className="about-us-heading">About Us</h1> */}
-      <p className="about-us-description">Welcome to Paradise Nursery, where green meets serenity!</p>
-      <p className="about-us-content">
-        At Paradise Nursery, we are passionate about bringing nature closer to you. Our mission is to provide a wide range of 
-        high-quality plants that not only enhance the beauty of your surroundings but also contribute to a healthier and 
-        more sustainable lifestyle. From air-purifying plants to aromatic fragrant ones, we have something for every 
-        plant enthusiast.
-      </p>
-      {/* <p className="plant_logo_left"><img src="https://p1.hiclipart.com/preview/922/979/640/green-leaf-logo-emoji-seedling-emoticon-sticker-plant-plant-stem-flower-png-clipart-thumbnail.jpg" height='50px' width='50px' alt="" /></p> */}
-      <p className="about-us-content">
-        Our team of experts is dedicated to ensuring that each plant meets our strict standards of quality and care. 
-        Whether you're a seasoned gardener or just starting your green journey, we're here to support you every step of 
-        the way. Feel free to explore our collection, ask questions, and let us help you find the perfect plant for your 
-        home or office.
-      </p>
-      {/* <p className="plant_logo_right"><img src="https://p1.hiclipart.com/preview/922/979/640/green-leaf-logo-emoji-seedling-emoticon-sticker-plant-plant-stem-flower-png-clipart-thumbnail.jpg" height='50px' width='50px' alt="" /></p> */}
+    <div className="product-grid-container">
+      {/* Step 2: Display Plant Details within a div with class name product-grid */}
+      <div className="product-grid">
+        {/* Step 2: Utilize map() to iterate over the plant array */}
+        {plantsArray.map((plant, index) => (
+          <div key={index} className="product-card">
+            <img src={plant.image} alt={plant.name} className="product-image" />
+            <h2 className="product-name">{plant.name}</h2>
+            <p className="product-description">{plant.description}</p>
+            <p className="product-cost">{plant.cost}</p>
 
-      <p className="about-us-content">
-        Join us in our mission to create a greener, healthier world. Visit Paradise Nursery today and experience the 
-        beauty of nature right at your doorstep.
-      </p>
+            {/* Step 3: Display an Add to Cart button for each plant */}
+            <button 
+              className="add-to-cart-button" 
+              disabled={addedToCart[plant.name]} 
+              onClick={() => handleAddToCart(plant)}
+            >
+              {addedToCart[plant.name] ? "Added to Cart" : "Add to Cart"}
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-export default AboutUs;
+export default ProductList;
