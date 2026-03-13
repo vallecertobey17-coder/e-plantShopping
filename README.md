@@ -1,4 +1,4 @@
-# coding-project-template
+# e-plant shopping
 
 e-plantShopping is a modern, responsive e-commerce web application designed for plant enthusiasts. This application provides a seamless shopping experience, allowing users to browse a diverse catalog of indoor and outdoor plants, manage their selections, and proceed through a streamlined checkout process.
 
